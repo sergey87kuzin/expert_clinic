@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        exclude: ^.*\b(migrations)\b.*$
+        language_version: python3
+        args: [
+            "--line-length=119"
+        ]
+  - repo: https://github.com/humitos/mirrors-autoflake
+    rev: v1.1
+    hooks:
+      - id: autoflake
+        args: [ '--in-place', '--remove-all-unused-imports', '--remove-unused-variable' ]
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        exclude: ^butler_bot/|^billing/|^common/|^migrations/
+        args: [
+          "--ignore=E203,W503",
+          "--max-line-length=140",
+          "--exclude=*migrations*",
+        ]
+  - repo: local
+    hooks:
+      - id: migrations-check
+        language: system
+        name: Check for uncreated migrations.
+        entry: bash -c "./manage.py makemigrations --check --dry-run"
+        types: [ "python3" ]
+        pass_filenames: false
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-merge-conflict
