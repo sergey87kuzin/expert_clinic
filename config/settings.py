@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "rest_framework",
     "django_filters",
     "users",
@@ -88,8 +89,14 @@ WSGI_APPLICATION = "config.wsgi.application"
 # }
 
 DATABASES = {
-    "default": env.db_url(),
-    "TEST": {"NAME": env.get_value("TEST_DATABASE_NAME"), "ENGINE": "django.db.backends.postgresql"},
+    'default': {
+        'ENGINE': env('ENGINE', default='django.db.backends.postgresql'),
+        'NAME': env('DB_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+    }
 }
 
 # Password validation
